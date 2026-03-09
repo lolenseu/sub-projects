@@ -1,0 +1,28 @@
+/* Header */
+.admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #333;
+    color: #fff;
+    padding: 20px 15%;
+}
+
+.admin-header .logo {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.admin-header .logout-btn {
+    background-color: #e74c3c;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 16px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.admin-header .logout-btn:hover {
+    background-color: #c0392b;
+}

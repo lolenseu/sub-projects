@@ -1,0 +1,248 @@
+/* Containers */
+.admin-container {
+    padding: 20px 15%;
+}
+
+.admin-container h3 {
+    margin-top: 0;
+    margin-bottom: 18px;
+    color: #fff;
+    font-size: 1.5em;
+}
+
+/* Add Product */
+.admin-container .add-product-btn {
+    background-color: rgb(86, 156, 113);
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 16px;
+    cursor: pointer;
+    font-size: 1em;
+    margin-bottom: 20px;
+    transition: background 0.2s;
+}
+
+.admin-container .add-product-btn:hover {
+    background-color: rgb(52, 114, 76);
+}
+
+/* Add Product Popover */
+.add-product-popover-container {
+    background-color: #fff;
+    border-radius: 14px;
+    box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.6);
+    padding: 30px 4%;
+    width: 400px;
+    max-width: 90%;
+    z-index: 1000;
+    border: 1px solid #ccc;
+    position: fixed;
+    top: 50px;
+    right: 20px;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Close Button */
+.add-product-popover-close-btn {
+    position: absolute;
+    top: 5px;
+    right: 15px;
+    font-size: 28px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #888;
+}
+
+.add-product-popover-close-btn:hover {
+    color: #000;
+}
+
+/* Form Styling */
+.add-product-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.add-product-form input[type="text"],
+.add-product-form input[type="number"],
+.add-product-form input[type="file"],
+.add-product-form textarea {
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 16px;;
+    font-size: 14px;
+    resize: none;
+}
+
+.add-product-form button[type="submit"] {
+    background-color: #2ecc71;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 16px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.add-product-form button[type="submit"]:hover {
+    background-color: #27ae60;
+}
+
+
+/* Product List */
+.product-row {
+    display: flex;
+    align-items: center;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    padding: 20px 4%;
+}
+
+.product-row img {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 5px;
+    margin-right: 20px;
+}
+
+.product-row .product-info {
+    flex: 1;
+}
+
+.product-row .product-info h4 {
+    margin: 5px 4%;
+    font-size: 20px;
+    color: #555;
+}
+
+.product-row .product-info h3 {
+    margin: 0;
+    font-size: 18px;
+}
+
+.product-row .product-info p {
+    margin: 5px 4%;
+    font-size: 16px;
+    color: #555;
+}
+
+.product-row .product-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.product-row .product-actions button {
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    padding: 12px 18px;
+    border-radius: 16px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background 0.2s;
+}
+
+.product-row .product-actions button.delete-btn {
+    background-color: #e74c3c;
+    font-size: 1em;
+}
+
+.product-row .product-actions button:hover {
+    opacity: 0.9;
+}
+
+/* Edit Product Popover */
+.edit-product-popover-container {
+    background-color: #fff;
+    border-radius: 14px;
+    box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.6);
+    padding: 30px 4%;
+    width: 400px;
+    max-width: 90%;
+    z-index: 1000;
+    border: 1px solid #ccc;
+    position: fixed;
+    top: 50px;
+    right: 20px;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.edit-product-popover-close-btn {
+    position: absolute;
+    top: 5px;
+    right: 15px;
+    font-size: 28px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #888;
+}
+
+.edit-product-popover-close-btn:hover {
+    color: #000;
+}
+
+.edit-product-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.edit-product-form input[type="text"],
+.edit-product-form input[type="number"],
+.edit-product-form input[type="file"],
+.edit-product-form textarea {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 16px;
+    font-size: 14px;
+    resize: none;
+}
+
+.edit-product-form button[type="submit"] {
+    background-color: #3498db;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 16px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.edit-product-form button[type="submit"]:hover {
+    background-color: #2980b9;
+}
+
+/* Quantity input inside the forms */
+.add-product-form input[name="quantity"],
+.edit-product-form input[name="quantity"] {
+    width: 100%;
+    padding: 8px 12px;
+    margin-top: 4px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+/* Show the stock value in the product list */
+.product-info p strong {
+    color: #27ae60;      /* green for stock */
+}
+
+/* Animation for Popovers */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

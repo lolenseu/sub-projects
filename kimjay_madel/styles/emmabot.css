@@ -1,0 +1,165 @@
+/* bot button  */
+.chatbot-button-container {
+    position: fixed;
+    bottom: 132px;
+    right: 48px;
+  }
+  
+  .chatbot-button {
+    padding: 15px 15px;
+    border-radius: 14px;
+    border: none;
+    color: #f5f5f5;
+    cursor: pointer;
+    font-size: 18px;
+    background-color: rgb(86, 156, 113);
+    transition: .3s;
+  }
+  
+  .chatbot-button:hover {
+    background: linear-gradient(
+        to right,
+        rgb(105, 190, 138),
+        rgb(49, 138, 83),
+        rgb(49, 138, 83),
+        rgb(105, 190, 138)
+    );
+    background-size: 200% auto;
+    animation: gradientAnimation 3s linear infinite;
+    color: #f5f5f5;
+    box-shadow: 0 0 50px rgb(17, 39, 26);
+    transition: background 0.3s ease-in-out;
+}
+
+@keyframes gradientAnimation {
+    0% {
+        background-position: 200% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+  
+  /* message container */
+  .chatbot-chat-container {
+    top: 60px;
+    height: 600px;
+    width: 900px;
+    position: fixed;
+    border: 1px solid #ccc;
+    background-color: #f5f5f5;
+    box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.6);
+    padding: 5px;
+    border-radius: 14px;
+    animation: fadeIn 0.3s ease-in-out;
+  }
+
+  .chat-close-btn {
+    position: absolute;
+    top: 5px;
+    right: 15px;
+    font-size: 28px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #888;
+}
+
+.chat-close-btn:hover {
+    color: #000;
+}
+  
+  .emmatag {
+    text-align: center;
+    color: #333;
+    font-size: 18px;
+    text-shadow: 0 0 20px #ffffff;
+  }
+  
+  .message-box {
+    height: 460px; 
+    width: auto; 
+    overflow-y: auto;
+  }
+  
+  .message {
+    margin: 20px 50px;
+    margin-bottom: 20px;
+    padding: 18px 20px;
+    border-radius: 16px;
+    font-size: 18px;
+  }
+  
+  .message.user {
+    text-align: right;
+    margin-left: auto;
+    max-width: 45%;
+    background-color: rgba(49, 138, 83, 1);
+    color: white;
+    text-shadow: 0 0 20px #f5f5f5;
+  }
+  
+  .message.bot {
+    text-align: left;
+    margin-right: auto;
+    max-width: 64%;
+    background-color: rgba(15, 15, 15, 0.8);
+    color: white;
+    text-shadow: 0 0 20px #858585;
+  }
+  
+  .message.typing {
+    font-style: italic;
+    color: #e7e7e7;
+    text-shadow: 0 0 20px #858585;
+  }
+  
+  .user-input {
+    border: none;
+    outline: none;
+    color: black;
+    margin: 15px;
+    padding: 15px 20px;
+    width: 78%;
+    background-color: white;
+    border-radius: 14px;
+    border: 2px solid black;
+    font-size: 16px;
+    transition: .3s;
+  }
+  
+  .user-input:hover {
+    transition: .8s;
+    border: 2px solid  rgb(86, 156, 113);
+  }
+  
+  .user-button {
+    padding: 15px 20px;
+    border-radius: 14px;
+    color: white;
+    cursor: pointer;
+    font-size: 18px;
+    border: none;
+    background-color:  rgb(86, 156, 113);
+    transition: .3s;
+  }
+  
+  .user-button:hover {
+    background-color: rgb(52, 114, 76);
+    transition: .8s;
+  }
+
+  /* Animation for Popovers */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+  
+  
+  

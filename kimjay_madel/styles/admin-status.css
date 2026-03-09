@@ -1,0 +1,142 @@
+/* Containers */
+.admin-container {
+    padding: 20px 15%;
+}
+
+.first-container, .second-container {
+    margin: 0 auto 0 auto;
+    background: none;
+    padding: 32px 0;
+}
+
+.admin-container h3 {
+    margin-top: 0;
+    margin-bottom: 18px;
+    color: #fff;
+    font-size: 1.5em;
+}
+
+p {
+    margin: 0;
+    color: #fff;
+    font-size: 1em;
+}
+
+.flex-row {
+    display: flex;
+    gap: 24px;
+}
+
+
+/* Orders */
+.orders {
+    background: none;
+}
+
+.order-row {
+    display: flex;
+    align-items: center;
+    border-radius: 10px;
+    background: #fff;
+    margin-bottom: 18px;
+    padding: 26px 4%;
+    gap: 16px;
+    box-shadow: 0 1px 6px rgba(86,156,113,0.07);
+}
+
+.order-row:last-child {
+    margin-bottom: 0;
+}
+
+.order-row img {
+    width: 150px;
+    height: 159px;
+    object-fit: cover;
+    border-radius: 5px;
+    margin-right: 12px;
+}
+
+.order-info {
+    flex: 2;
+    color: #555;
+    font-size: 1em;
+}
+
+.order-info div {
+    color: #555;
+    padding: 4px 0;
+}
+
+.order-actions {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 10px;
+    min-width: 120px;
+}
+
+.order-actions form {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+}
+
+.order-actions select {
+    padding: 2px 8px;
+    border-radius: 6px;
+    border: 1px solid #b5b5b5;
+    background: #f5f5f5;
+    color: #333;
+    font-size: 1em;
+    font-family: inherit;
+    outline: none;
+    transition: border 0.2s, box-shadow 0.2s;
+    box-shadow: 0 1px 3px rgba(86,156,113,0.05);
+    cursor: pointer;
+}
+
+.order-actions select:focus {
+    border: 1.5px solid #569c71;
+    box-shadow: 0 0 0 2px rgba(86,156,113,0.12);
+    background: #fff;
+}
+
+.order-actions .edit-btn {
+    margin: 0 14px;
+    padding: 6px 14px;
+    border-radius: 8px;
+    font-size: 1em;
+    background: rgb(86, 156, 113);
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background 0.2s;
+}
+
+.order-actions .edit-btn:hover {
+    background: rgb(52, 114, 76);
+}
+.order-actions .status-badge {
+    margin-top: 0;
+}
+
+/* Status */
+.status-badge {
+    display: inline-block;
+    padding: 4px 14px;
+    border-radius: 8px;
+    font-size: 1em;
+    color: #fff;
+    font-weight: 500;
+    background: #569c71;
+    margin-top: 6px;
+}
+
+.status-badge.pending { background: #e5a11e; }
+.status-badge.ondelivery { background: #1e88e5; }
+.status-badge.delivered { background: #4caf50; }
+.status-badge.failed { background: #d32f2f; }
