@@ -80,6 +80,16 @@ include 'cart.php';
                         <button popovertarget="userPopover" id="userButton" class="user-icon">👤</button>
                     <?php endif; ?>
                 </div>
+                
+                <!-- Orders Button - Only show when logged in -->
+                <?php if ($isLoggedIn): ?>
+                <div class="orders-container">
+                    <button popovertarget="buyOrdersPopover" id="ordersButton" class="orders-icon" title="My Orders">
+                        📋 <span id="ordersCount" class="orders-badge">0</span>
+                    </button>
+                </div>
+                <?php endif; ?>
+                
                 <div class="cart-container">
                     <button popovertarget="cartPopover" id="cartButton" class="cart-icon">
                         🛒 <span id="cartCount">0</span>
@@ -160,6 +170,7 @@ include 'cart.php';
                 <?php endif; ?>
             </div>
         
+        <!-- Main Orders Popover (Now directly opened by the orders icon) -->
         <div popover id="buyOrdersPopover" class="buyorder-popover-container">
             <button popovertarget="buyOrdersPopover" popovertargetaction="hide" class="buyorder-close-btn" aria-label="Close">&times;</button>
             <h3>My Orders</h3>
@@ -169,9 +180,12 @@ include 'cart.php';
                     // Fetch orders for this user
                     $userId = $_SESSION['user_id'];
                     $ordersSql = "
-                        SELECT ps.*, p.name AS product_name, p.price, p.product_img
+                        SELECT ps.*, p.name AS product_name, p.price, p.product_img,
+                               pc.comment, pc.comment_time, a.username as admin_username
                         FROM product_status ps
                         JOIN products p ON ps.product_id = p.id
+                        LEFT JOIN product_comments pc ON ps.id = pc.order_id
+                        LEFT JOIN users a ON pc.admin_id = a.id
                         WHERE ps.user_id = ?
                         ORDER BY ps.order_time DESC
                     ";
@@ -185,22 +199,37 @@ include 'cart.php';
                             if (!empty($order['product_img'])) {
                                 $imgSrc = 'data:image/jpeg;base64,' . base64_encode($order['product_img']);
                             }
-                            echo '<div class="order-row">';
-                            echo '<img src="'.htmlspecialchars($imgSrc).'" alt="Product" class="order-img">';
-                            echo '<div style="flex:1;">';
-                            echo '<div style="font-weight:bold;">'.htmlspecialchars($order['product_name']).'</div>';
-                            echo '<div>Quantity: <span style="font-weight:bold;">'.intval($order['quantity']).'</span></div>';
-                            echo '<div style="color:#569c71;">₱'.number_format($order['price'],2).'</div>';
-                            echo '<div style="font-size:0.95em;">Status: <span class="status-badge '.htmlspecialchars($order['status']).'">'.ucfirst($order['status']).'</span></div>';
+                            $statusClass = htmlspecialchars($order['status']);
+                            echo '<div class="order-item">';
+                            echo '<img src="'.htmlspecialchars($imgSrc).'" alt="Product" class="order-item-img">';
+                            echo '<div class="order-item-details">';
+                            echo '<div class="order-item-name">'.htmlspecialchars($order['product_name']).'</div>';
+                            echo '<div class="order-item-qty">Quantity: '.intval($order['quantity']).'</div>';
+                            echo '<div class="order-item-price">₱'.number_format($order['price'],2).'</div>';
+                            echo '<div class="order-item-status">';
+                            echo '<span class="status-badge '.$statusClass.'">'.ucfirst($statusClass).'</span>';
                             echo '</div>';
-                            echo '</div>';
+                            
+                            // Display comment if exists
+                            if (!empty($order['comment'])) {
+                                echo '<div class="order-item-comment">';
+                                echo '<div class="comment-header">';
+                                echo '<span class="comment-author">Admin</span>';
+                                echo '<span class="comment-time">'.date('M d, Y', strtotime($order['comment_time'])).'</span>';
+                                echo '</div>';
+                                echo '<p class="comment-text">'.htmlspecialchars($order['comment']).'</p>';
+                                echo '</div>';
+                            }
+                            
+                            echo '</div>'; // Close order-item-details
+                            echo '</div>'; // Close order-item
                         }
                     } else {
-                        echo '<p style="text-align:center;">No orders found.</p>';
+                        echo '<p class="no-orders-message">You haven\'t placed any orders yet.</p>';
                     }
                     $stmt->close();
                 } else {
-                    echo '<p style="text-align:center;">Please log in to view your orders.</p>';
+                    echo '<p class="no-orders-message">Please log in to view your orders.</p>';
                 }
                 ?>
             </div>
@@ -315,7 +344,7 @@ include 'cart.php';
                 <img id="modalImage" src="" alt="Product Image">
                 <h3 id="modalTitle">Product Name</h3>
                 <h5 id="modalDescription">Product Description</h5>
-                <p class="stock">Stock: <strong><?php echo $stock; ?></strong></p>
+                <p class="stock">Stock: <strong id="modalStock">0</strong></p>
                 <p id="modalPrice">&#8369;0.00</p>
 
                 <label for="modalQty">Quantity to add:</label>
@@ -325,7 +354,6 @@ include 'cart.php';
                         name="qty"
                         min="1" value="1"
                         class="qty-input"
-                        <?php echo !empty($stock) ? 'max="'. $stock .'"' : ''; ?>
                         style="width:60px;">
                     <button type="button" class="qty-plus">+</button>
                 </div>
@@ -425,5 +453,24 @@ include 'cart.php';
     <script src="scripts/navbar.js"></script>
     <script src="scripts/popover.js"></script>
     <script src="scripts/emmabot.js"></script>
+    <script>
+        // Function to update orders count
+        function updateOrdersCount() {
+            <?php if ($isLoggedIn): ?>
+            fetch('get_orders_count.php')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('ordersCount').textContent = data.count;
+                });
+            <?php endif; ?>
+        }
+
+        // Update orders count on page load and periodically
+        document.addEventListener('DOMContentLoaded', function() {
+            updateOrdersCount();
+            // Update every 30 seconds
+            setInterval(updateOrdersCount, 30000);
+        });
+    </script>
 </body>
 </html>

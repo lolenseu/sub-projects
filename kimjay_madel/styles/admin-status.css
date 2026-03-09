@@ -4,29 +4,29 @@
 }
 
 .first-container, .second-container {
-    margin: 0 auto 0 auto;
+    margin: 0 auto 30px auto;
     background: none;
     padding: 32px 0;
 }
 
 .admin-container h3 {
     margin-top: 0;
-    margin-bottom: 18px;
+    margin-bottom: 25px;
     color: #fff;
-    font-size: 1.5em;
+    font-size: 1.8em;
+    font-weight: 500;
+    padding-bottom: 10px;
 }
 
-p {
-    margin: 0;
-    color: #fff;
-    font-size: 1em;
+.no-orders {
+    text-align: center;
+    padding: 40px;
+    background: #f8f9fa;
+    border-radius: 12px;
+    color: #666;
+    font-style: italic;
+    border: 1px dashed #4CAF50;
 }
-
-.flex-row {
-    display: flex;
-    gap: 24px;
-}
-
 
 /* Orders */
 .orders {
@@ -35,13 +35,14 @@ p {
 
 .order-row {
     display: flex;
-    align-items: center;
-    border-radius: 10px;
+    align-items: flex-start;
+    border-radius: 16px;
     background: #fff;
-    margin-bottom: 18px;
-    padding: 26px 4%;
-    gap: 16px;
-    box-shadow: 0 1px 6px rgba(86,156,113,0.07);
+    margin-bottom: 25px;
+    padding: 25px 30px;
+    gap: 25px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    border: 1px solid #e0e0e0;
 }
 
 .order-row:last-child {
@@ -50,21 +51,42 @@ p {
 
 .order-row img {
     width: 150px;
-    height: 159px;
+    height: 150px;
     object-fit: cover;
-    border-radius: 5px;
-    margin-right: 12px;
+    border-radius: 12px;
+    
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
 
 .order-info {
     flex: 2;
     color: #555;
-    font-size: 1em;
 }
 
-.order-info div {
-    color: #555;
-    padding: 4px 0;
+.order-info .product-name {
+    font-size: 1.3em;
+    margin-bottom: 8px;
+    color: #333;
+}
+
+.order-info .product-price {
+    font-size: 1.2em;
+    color: #4CAF50;
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+
+.order-info .user-detail {
+    font-size: 0.95em;
+    color: #666;
+    margin-bottom: 5px;
+}
+
+.order-info .order-time {
+    font-size: 0.9em;
+    color: #888;
+    margin-top: 8px;
+    font-style: italic;
 }
 
 .order-actions {
@@ -72,71 +94,322 @@ p {
     display: flex;
     flex-direction: column;
     align-items: flex-end;
-    justify-content: center;
-    gap: 10px;
-    min-width: 120px;
+    justify-content: flex-start;
+    gap: 20px;
+    min-width: 250px;
 }
 
-.order-actions form {
+/* Status Form - Only in Pending Orders */
+.status-form {
     display: flex;
     flex-direction: row;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
+    width: 100%;
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 12px;
+    border: 1px solid #e0e0e0;
 }
 
-.order-actions select {
-    padding: 2px 8px;
-    border-radius: 6px;
-    border: 1px solid #b5b5b5;
-    background: #f5f5f5;
+.status-select {
+    padding: 10px 15px;
+    border-radius: 8px;
+    border: 1px solid #4CAF50;
+    background: white;
     color: #333;
-    font-size: 1em;
+    font-size: 0.95em;
     font-family: inherit;
     outline: none;
-    transition: border 0.2s, box-shadow 0.2s;
-    box-shadow: 0 1px 3px rgba(86,156,113,0.05);
     cursor: pointer;
+    flex: 1;
 }
 
-.order-actions select:focus {
-    border: 1.5px solid #569c71;
-    box-shadow: 0 0 0 2px rgba(86,156,113,0.12);
-    background: #fff;
+.status-select:focus {
+    border: 2px solid #4CAF50;
+    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
 }
 
-.order-actions .edit-btn {
-    margin: 0 14px;
-    padding: 6px 14px;
+.edit-btn {
+    margin: 0;
+    padding: 10px 20px;
     border-radius: 8px;
-    font-size: 1em;
-    background: rgb(86, 156, 113);
+    font-size: 0.95em;
+    background: #4CAF50;
     color: #fff;
     border: none;
     cursor: pointer;
     font-weight: 500;
-    transition: background 0.2s;
+    white-space: nowrap;
 }
 
-.order-actions .edit-btn:hover {
-    background: rgb(52, 114, 76);
-}
-.order-actions .status-badge {
-    margin-top: 0;
+.edit-btn:hover {
+    background: #45a049;
 }
 
-/* Status */
+/* Status Badge */
 .status-badge {
     display: inline-block;
-    padding: 4px 14px;
-    border-radius: 8px;
+    padding: 8px 20px;
+    border-radius: 25px;
     font-size: 1em;
     color: #fff;
-    font-weight: 500;
-    background: #569c71;
-    margin-top: 6px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    align-self: flex-start;
 }
 
-.status-badge.pending { background: #e5a11e; }
-.status-badge.ondelivery { background: #1e88e5; }
-.status-badge.delivered { background: #4caf50; }
-.status-badge.failed { background: #d32f2f; }
+.status-badge.pending { 
+    background: #e5a11e; 
+}
+
+.status-badge.ondelivery { 
+    background: #1e88e5; 
+}
+
+.status-badge.delivered { 
+    background: #4caf50; 
+}
+
+.status-badge.failed { 
+    background: #d32f2f; 
+}
+
+/* Comment Display - For showing existing comments */
+.comment-display {
+    margin-top: 20px;
+    background: #f0f8f0;
+    border-radius: 12px;
+    padding: 15px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.comment-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+    border-bottom: 1px dashed #4CAF50;
+}
+
+.comment-author {
+    font-size: 0.95em;
+    font-weight: 600;
+    color: #4CAF50;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.comment-author::before {
+    content: "👤";
+    font-size: 0.9em;
+}
+
+.comment-date {
+    font-size: 0.8em;
+    color: #888;
+    background: white;
+    padding: 3px 12px;
+    border-radius: 20px;
+    border: 1px solid #4CAF50;
+}
+
+.comment-body {
+    font-size: 1em;
+    color: #444;
+    line-height: 1.5;
+    padding: 5px 0;
+    word-break: break-word;
+}
+
+/* Comment Section - For adding new comments (Only in Completed/Failed Orders) */
+.comment-section {
+    margin-top: 10px;
+    width: 100%;
+    background: #f8f9fa;
+    border-radius: 12px;
+    padding: 20px;
+    border: 1px solid #e0e0e0;
+}
+
+.comment-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+}
+
+.comment-form textarea {
+    padding: 15px;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    font-family: inherit;
+    font-size: 0.95em;
+    resize: vertical;
+    min-height: 80px;
+    width: 100%;
+    box-sizing: border-box;
+    background: white;
+}
+
+.comment-form textarea:focus {
+    outline: none;
+    border-color: #4CAF50;
+    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+}
+
+.comment-form textarea::placeholder {
+    color: #aaa;
+    font-style: italic;
+}
+
+.comment-btn {
+    background: #4CAF50;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 30px;
+    font-size: 1em;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
+    align-self: flex-start;
+}
+
+.comment-btn:hover {
+    background: #45a049;
+}
+
+.comment-icon {
+    font-size: 1.1em;
+}
+
+/* Completed Order Specific Styling - REMOVED green left border and gradient */
+.completed-order {
+    background: #fff;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+    .admin-container {
+        padding: 20px 10%;
+    }
+    
+    .order-row {
+        flex-direction: column;
+        padding: 20px;
+    }
+    
+    .order-row img {
+        width: 100%;
+        height: auto;
+        max-height: 200px;
+        margin-right: 0;
+        margin-bottom: 15px;
+    }
+    
+    .order-actions {
+        align-items: stretch;
+        width: 100%;
+    }
+    
+    .status-form {
+        flex-direction: column;
+    }
+    
+    .status-select,
+    .edit-btn {
+        width: 100%;
+    }
+    
+    .comment-btn {
+        align-self: stretch;
+        text-align: center;
+    }
+}
+
+@media (max-width: 768px) {
+    .admin-container {
+        padding: 20px 5%;
+    }
+    
+    .admin-container h3 {
+        font-size: 1.5em;
+    }
+    
+    .first-container, .second-container {
+        padding: 20px 0;
+    }
+    
+    .order-row {
+        padding: 20px;
+    }
+    
+    .order-info .product-name {
+        font-size: 1.1em;
+    }
+    
+    .order-info .product-price {
+        font-size: 1em;
+    }
+    
+    .order-info .user-detail,
+    .order-info .order-time {
+        font-size: 0.85em;
+    }
+    
+    .status-badge {
+        font-size: 0.9em;
+        padding: 6px 15px;
+    }
+    
+    .comment-display,
+    .comment-section {
+        padding: 15px;
+    }
+    
+    .comment-author {
+        font-size: 0.9em;
+    }
+    
+    .comment-body {
+        font-size: 0.9em;
+    }
+    
+    .comment-btn {
+        padding: 10px 20px;
+        font-size: 0.9em;
+    }
+}
+
+@media (max-width: 480px) {
+    .admin-container h3 {
+        font-size: 1.3em;
+    }
+    
+    .order-row {
+        padding: 15px;
+    }
+    
+    .order-row img {
+        border-width: 2px;
+    }
+    
+    .comment-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+    
+    .comment-date {
+        font-size: 0.7em;
+    }
+}

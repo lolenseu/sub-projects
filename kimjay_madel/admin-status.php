@@ -28,11 +28,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['order_id'], $_POST['n
     $stmt->bind_param("si", $newStatus, $orderId);
     $stmt->execute();
     $stmt->close();
-    header("Location: admin-status.php"); // <-- Change this line
+    header("Location: admin-status.php");
     exit();
 }
 
-// Fetch pending orders with user and product info
+// Handle comment submission
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['order_id'], $_POST['admin_comment']) && !empty($_POST['admin_comment'])) {
+    $orderId = intval($_POST['order_id']);
+    $comment = trim($_POST['admin_comment']);
+    $adminId = $_SESSION['user_id'];
+    
+    // Insert comment
+    $stmt = $conn->prepare("INSERT INTO product_comments (order_id, admin_id, comment) VALUES (?, ?, ?)");
+    $stmt->bind_param("iis", $orderId, $adminId, $comment);
+    $stmt->execute();
+    $stmt->close();
+    
+    header("Location: admin-status.php");
+    exit();
+}
+
+// Fetch pending orders with user and product info (NO COMMENTS HERE)
 $pendingSql = "
     SELECT po.id, po.user_id, po.product_id, po.quantity, po.status, po.order_time,
            u.username, u.email, u.address,
@@ -45,18 +61,21 @@ $pendingSql = "
 ";
 $pendingOrders = $conn->query($pendingSql);
 
-// Fetch pending/ondelivery/delivered/failed orders
-$completedSql = "
+// Fetch all orders with comments (for delivered/failed orders)
+$allOrdersSql = "
     SELECT po.id, po.user_id, po.product_id, po.quantity, po.status, po.order_time,
            u.username, u.email, u.address,
-           p.name AS product_name, p.price, p.product_img
+           p.name AS product_name, p.price, p.product_img,
+           pc.comment, pc.comment_time, a.username as admin_username
     FROM product_status po
     JOIN users u ON po.user_id = u.id
     JOIN products p ON po.product_id = p.id
-    WHERE po.status IN ('pending', 'ondelivery', 'delivered', 'failed')
+    LEFT JOIN product_comments pc ON po.id = pc.order_id
+    LEFT JOIN users a ON pc.admin_id = a.id
+    WHERE po.status IN ('delivered', 'failed')
     ORDER BY po.order_time DESC
 ";
-$completedOrders = $conn->query($completedSql);
+$allOrders = $conn->query($allOrdersSql);
 ?>
 
 <!DOCTYPE html>
@@ -90,25 +109,26 @@ $completedOrders = $conn->query($completedSql);
 
     <!-- Main Content -->
     <div class="admin-container">
-        <!-- First Container: Pending Orders -->
+        <!-- First Container: Pending Orders (NO COMMENTS) -->
         <div class="first-container">
-            <h3>Pending Option</h3>
+            <h3>Pending Orders</h3>
             <div class="orders">
-                <?php if ($pendingOrders->num_rows > 0): ?>
+                <?php if ($pendingOrders && $pendingOrders->num_rows > 0): ?>
                     <?php while ($order = $pendingOrders->fetch_assoc()): ?>
                         <div class="order-row">
                             <img src="data:image/jpeg;base64,<?php echo base64_encode($order['product_img']); ?>" alt="Product">
                             <div class="order-info">
-                                <div><strong><?php echo htmlspecialchars($order['product_name']); ?></strong> (x<?php echo $order['quantity']; ?>)</div>
-                                <div>₱<?php echo number_format($order['price'], 2); ?></div>
-                                <div>User: <?php echo htmlspecialchars($order['username']); ?> (<?php echo htmlspecialchars($order['email']); ?>)</div>
-                                <div>Address: <?php echo htmlspecialchars($order['address']); ?></div>
-                                <div>Order Time: <?php echo $order['order_time']; ?></div>
+                                <div class="product-name"><strong><?php echo htmlspecialchars($order['product_name']); ?></strong> (x<?php echo $order['quantity']; ?>)</div>
+                                <div class="product-price">₱<?php echo number_format($order['price'], 2); ?></div>
+                                <div class="user-detail">User: <?php echo htmlspecialchars($order['username']); ?></div>
+                                <div class="user-detail">Email: <?php echo htmlspecialchars($order['email']); ?></div>
+                                <div class="user-detail">Address: <?php echo htmlspecialchars($order['address']); ?></div>
+                                <div class="order-time">Order Time: <?php echo $order['order_time']; ?></div>
                             </div>
                             <div class="order-actions">
-                                <form method="POST" style="display:inline;">
+                                <form method="POST" class="status-form">
                                     <input type="hidden" name="order_id" value="<?php echo $order['id']; ?>">
-                                    <select name="new_status">
+                                    <select name="new_status" class="status-select">
                                         <option value="pending" <?php if($order['status']=='pending') echo 'selected'; ?>>Pending</option>
                                         <option value="ondelivery" <?php if($order['status']=='ondelivery') echo 'selected'; ?>>OnDelivery</option>
                                         <option value="delivered">Delivered</option>
@@ -120,34 +140,59 @@ $completedOrders = $conn->query($completedSql);
                         </div>
                     <?php endwhile; ?>
                 <?php else: ?>
-                    <p>No pending orders.</p>
+                    <p class="no-orders">No pending orders.</p>
                 <?php endif; ?>
             </div>
         </div>
 
-        <!-- Second Container: Completed/Delivered Orders Log -->
+        <!-- Second Container: Completed/Failed Orders (WITH COMMENTS) -->
         <div class="second-container">
-            <h3>Status</h3>
-            <?php if ($completedOrders->num_rows > 0): ?>
-                <?php while ($order = $completedOrders->fetch_assoc()): ?>
-                    <div class="order-row">
+            <h3>Completed & Failed Orders</h3>
+            <?php if ($allOrders && $allOrders->num_rows > 0): ?>
+                <?php while ($order = $allOrders->fetch_assoc()): ?>
+                    <div class="order-row completed-order">
                         <img src="data:image/jpeg;base64,<?php echo base64_encode($order['product_img']); ?>" alt="Product">
                         <div class="order-info">
-                            <div><strong><?php echo htmlspecialchars($order['product_name']); ?></strong> (x<?php echo $order['quantity']; ?>)</div>
-                            <div>₱<?php echo number_format($order['price'], 2); ?></div>
-                            <div>User: <?php echo htmlspecialchars($order['username']); ?> (<?php echo htmlspecialchars($order['email']); ?>)</div>
-                            <div>Address: <?php echo htmlspecialchars($order['address']); ?></div>
-                            <div>Order Time: <?php echo $order['order_time']; ?></div>
+                            <div class="product-name"><strong><?php echo htmlspecialchars($order['product_name']); ?></strong> (x<?php echo $order['quantity']; ?>)</div>
+                            <div class="product-price">₱<?php echo number_format($order['price'], 2); ?></div>
+                            <div class="user-detail">User: <?php echo htmlspecialchars($order['username']); ?></div>
+                            <div class="user-detail">Email: <?php echo htmlspecialchars($order['email']); ?></div>
+                            <div class="user-detail">Address: <?php echo htmlspecialchars($order['address']); ?></div>
+                            <div class="order-time">Order Time: <?php echo $order['order_time']; ?></div>
+                            
+                            <!-- Display existing comment if any -->
+                            <?php if (!empty($order['comment'])): ?>
+                                <div class="comment-display">
+                                    <div class="comment-header">
+                                        <span class="comment-author">Admin Comment</span>
+                                        <span class="comment-date"><?php echo date('M d, Y', strtotime($order['comment_time'])); ?></span>
+                                    </div>
+                                    <div class="comment-body">
+                                        <?php echo htmlspecialchars($order['comment']); ?>
+                                    </div>
+                                </div>
+                            <?php endif; ?>
                         </div>
                         <div class="order-actions">
                             <span class="status-badge <?php echo $order['status']; ?>">
                                 <?php echo ucfirst($order['status']); ?>
                             </span>
+                            
+                            <!-- Comment form for admin to add comments -->
+                            <div class="comment-section">
+                                <form method="POST" class="comment-form">
+                                    <input type="hidden" name="order_id" value="<?php echo $order['id']; ?>">
+                                    <textarea name="admin_comment" placeholder="Add a comment for this order..." rows="3"></textarea>
+                                    <button type="submit" class="comment-btn">
+                                        <span class="comment-icon">💬</span> Add Comment
+                                    </button>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 <?php endwhile; ?>
             <?php else: ?>
-                <p>No completed or delivered orders.</p>
+                <p class="no-orders">No completed or failed orders.</p>
             <?php endif; ?>
         </div>
     </div>
